@@ -5,12 +5,12 @@
  * @author Novus Nota (https://github.com/novusnota)
  * @license MIT
  */
-(function (Prism) {
+(function(Prism) {
   Prism.languages.tact = {
     // reserved keywords
     'keyword': [
       {
-        pattern: /\b(?:abstract|as|const|contract(?!:)|do|else|extend|extends|fun|get|if|import|initOf|inline|let|message(?!:)|mutates|native|override|primitive|public|repeat|return|self|struct(?!:)|trait(?!:)|until|virtual|while|with)\b/,
+        pattern: /\b(?:abstract|as|catch|const|contract(?!:)|do|else|extend|extends|foreach|fun|get|if|in|import|initOf|inline|let|message(?!:)|mutates|native|override|primitive|public|repeat|return|self|struct(?!:)|trait(?!:)|try|until|virtual|while|with)\b/,
       },
       { // keyword after as
         pattern: /(\bas\s+)\w+/,
@@ -104,7 +104,7 @@
     ],
 
     'operator': {
-      'pattern': /![!=]?|[+\-*/%=]=?|[<>]=|<<?|>>?|\|\|?|&&?/,
+      'pattern': /![!=]?|[+\-*/%=]=?|[<>]=|<<?|>>?|\|\|?|&&?|\^/,
     },
 
   };
@@ -115,6 +115,20 @@
       pattern: /(?:(")(?:\\.|(?!\1)[^\\\r\n])*\1(?!\1))/,
       greedy: true,
       inside: {
+        'regex': [
+          { // \\ \" \n \r \t \v \b \f
+            pattern: /\\[\\"nrtvbf]/,
+          },
+          { // hexEscape, \x00 through \xFF
+            pattern: /\\x[0-9a-fA-F]{2}/,
+          },
+          { // unicodeEscape, \u0000 through \uFFFF
+            pattern: /\\u[0-9a-fA-F]{4}/,
+          },
+          { // unicodeCodePoint, \u{0} through \u{FFFFFF}
+            pattern: /\\u\{[0-9a-fA-F]{1,6}\}/,
+          },
+        ],
         'string': {
           pattern: /[\s\S]+/,
         },
